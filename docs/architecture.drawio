@@ -1,0 +1,124 @@
+<mxfile host="app.diagrams.net" modified="2026-04-02T00:00:00.000Z" agent="Claude" version="24.0.0">
+  <diagram name="Rapid Camera Capture Architecture" id="architecture">
+    <mxGraphModel dx="1434" dy="790" grid="1" gridSize="8" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Browser API Layer Module -->
+        <mxCell id="module_browser_api" value="Browser API Layer" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#E2E8F0;fontFamily=Inter;fontSize=14;fontStyle=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="80" y="80" width="1000" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="getUserMedia" value="navigator.mediaDevices.getUserMedia()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;strokeWidth=1.5;fontColor=#1E293B;fontFamily=Inter;fontSize=13;" vertex="1" parent="module_browser_api">
+          <mxGeometry x="360" y="48" width="280" height="56" as="geometry" />
+        </mxCell>
+
+        <!-- Video Stream Layer Module -->
+        <mxCell id="module_video_stream" value="Video Stream Layer&#xa;⚡ Stream NEVER STOPS" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#E2E8F0;fontFamily=Inter;fontSize=14;fontStyle=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="80" y="232" width="1000" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="video_element" value="Video Element&#xa;autoPlay, playsInline" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;strokeWidth=1.5;fontColor=#1E293B;fontFamily=Inter;fontSize=13;" vertex="1" parent="module_video_stream">
+          <mxGeometry x="360" y="48" width="280" height="56" as="geometry" />
+        </mxCell>
+
+        <!-- Capture Layer Module -->
+        <mxCell id="module_capture" value="Capture Layer&#xa;📸 Parallel to video" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#E2E8F0;fontFamily=Inter;fontSize=14;fontStyle=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="80" y="384" width="1000" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="canvas" value="Hidden Canvas&#xa;(display: none)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;strokeWidth=1.5;fontColor=#1E293B;fontFamily=Inter;fontSize=13;" vertex="1" parent="module_capture">
+          <mxGeometry x="360" y="48" width="280" height="56" as="geometry" />
+        </mxCell>
+
+        <!-- Conversion Layer Module -->
+        <mxCell id="module_conversion" value="Conversion Layer" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#E2E8F0;fontFamily=Inter;fontSize=14;fontStyle=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="80" y="536" width="1000" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="toDataURL" value="canvas.toDataURL('image/png')" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;strokeWidth=1.5;fontColor=#1E293B;fontFamily=Inter;fontSize=13;" vertex="1" parent="module_conversion">
+          <mxGeometry x="360" y="48" width="280" height="56" as="geometry" />
+        </mxCell>
+
+        <!-- State Management Layer Module -->
+        <mxCell id="module_state" value="State Management Layer" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#E2E8F0;fontFamily=Inter;fontSize=14;fontStyle=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="80" y="688" width="1000" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="react_state" value="React useState&lt;Photo[]&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=8;fillColor=#D1FAE5;strokeColor=#059669;strokeWidth=1.5;fontColor=#1E293B;fontFamily=Inter;fontSize=13;" vertex="1" parent="module_state">
+          <mxGeometry x="400" y="44" width="200" height="64" as="geometry" />
+        </mxCell>
+
+        <!-- UI Rendering Layer Module -->
+        <mxCell id="module_ui" value="UI Rendering Layer&#xa;🔄 Both visible simultaneously" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#E2E8F0;fontFamily=Inter;fontSize=14;fontStyle=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="80" y="840" width="1000" height="136" as="geometry" />
+        </mxCell>
+        <mxCell id="camera_view" value="Camera View (40%)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;strokeWidth=1.5;fontColor=#1E293B;fontFamily=Inter;fontSize=13;" vertex="1" parent="module_ui">
+          <mxGeometry x="200" y="56" width="200" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="gallery" value="Gallery (60%)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;strokeWidth=1.5;fontColor=#1E293B;fontFamily=Inter;fontSize=13;" vertex="1" parent="module_ui">
+          <mxGeometry x="600" y="56" width="200" height="56" as="geometry" />
+        </mxCell>
+
+        <!-- Edges/Connectors -->
+        <!-- getUserMedia to video_element -->
+        <mxCell id="edge1" value="MediaStream" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=2;dashed=1;fontFamily=Inter;fontSize=11;fontColor=#64748B;endArrow=classic;endFill=1;" edge="1" parent="1" source="getUserMedia" target="video_element">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- video_element to canvas -->
+        <mxCell id="edge2" value="drawImage(video, 0, 0)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=2;dashed=1;fontFamily=Inter;fontSize=11;fontColor=#64748B;endArrow=classic;endFill=1;" edge="1" parent="1" source="video_element" target="canvas">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Note: Video to Canvas reads frame -->
+        <mxCell id="note_canvas" value="Reads current frame&#xa;without interrupting stream" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Inter;fontSize=11;fontColor=#64748B;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="720" y="416" width="160" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- canvas to toDataURL -->
+        <mxCell id="edge3" value="Synchronous frame capture" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=2;fontFamily=Inter;fontSize=11;fontColor=#64748B;endArrow=classic;endFill=1;" edge="1" parent="1" source="canvas" target="toDataURL">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- toDataURL to react_state -->
+        <mxCell id="edge4" value="setPhotos(prev =&gt; [newPhoto, ...prev])" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=2;dashed=1;fontFamily=Inter;fontSize=11;fontColor=#64748B;endArrow=classic;endFill=1;" edge="1" parent="1" source="toDataURL" target="react_state">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Output annotation -->
+        <mxCell id="note_output" value="Base64 Data URL" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Inter;fontSize=11;fontColor=#64748B;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="720" y="568" width="120" height="24" as="geometry" />
+        </mxCell>
+
+        <!-- video_element to camera_view (parallel path) -->
+        <mxCell id="edge5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=2;fontFamily=Inter;fontSize=11;fontColor=#64748B;endArrow=classic;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="video_element" target="camera_view">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="160" y="308" />
+              <mxPoint x="160" y="820" />
+              <mxPoint x="380" y="820" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- react_state to gallery -->
+        <mxCell id="edge6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563EB;strokeWidth=2;fontFamily=Inter;fontSize=11;fontColor=#64748B;endArrow=classic;endFill=1;" edge="1" parent="1" source="react_state" target="gallery">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Annotation: Captures happen in parallel -->
+        <mxCell id="note_parallel" value="Captures happen&#xa;in parallel" style="text;html=1;strokeColor=#D97706;fillColor=#FEF3C7;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontFamily=Inter;fontSize=12;fontColor=#92400E;fontStyle=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="920" y="432" width="136" height="48" as="geometry" />
+        </mxCell>
+
+        <!-- Annotation: No navigation/view switching -->
+        <mxCell id="note_no_switch" value="No navigation/&#xa;view switching" style="text;html=1;strokeColor=#D97706;fillColor=#FEF3C7;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontFamily=Inter;fontSize=12;fontColor=#92400E;fontStyle=1;arcSize=8;" vertex="1" parent="1">
+          <mxGeometry x="920" y="888" width="136" height="48" as="geometry" />
+        </mxCell>
+
+        <!-- Title -->
+        <mxCell id="title" value="Rapid Camera Capture Architecture" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Inter;fontSize=20;fontColor=#1E293B;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="24" width="520" height="32" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
