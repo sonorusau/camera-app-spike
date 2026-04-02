@@ -8,6 +8,8 @@ Most camera apps switch between camera view and preview/gallery, breaking the fl
 
 Keep the camera stream running continuously while rendering captured photos alongside it. No navigation, no mode switching.
 
+![Architecture Diagram](./docs/architecture.png)
+
 ## How It Works
 
 ### 1. Persistent Video Stream
