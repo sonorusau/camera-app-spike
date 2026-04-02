@@ -147,12 +147,41 @@ body {
   object-fit: cover;
 }
 
-.photo-timestamp {
+.photo-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 0.5rem;
   background-color: #ecf0f1;
+}
+
+.photo-timestamp {
+  padding: 0;
+  background-color: transparent;
   text-align: center;
   font-size: 0.875rem;
   color: #34495e;
+  flex: 1;
+}
+
+.delete-button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.delete-button:hover {
+  background-color: #c0392b;
 }
 
 @media (max-width: 768px) {

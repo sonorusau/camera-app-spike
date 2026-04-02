@@ -75,6 +75,10 @@ function App() {
     setPhotos(prev => [newPhoto, ...prev])
   }
 
+  const deletePhoto = (photoId: string) => {
+    setPhotos(prev => prev.filter(photo => photo.id !== photoId))
+  }
+
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString('en-US', {
       hour: '2-digit',
@@ -125,7 +129,10 @@ function App() {
               {photos.map(photo => (
                 <div key={photo.id} className="photo-card">
                   <img src={photo.dataUrl} alt={`Captured at ${formatTime(photo.timestamp)}`} />
-                  <div className="photo-timestamp">{formatTime(photo.timestamp)}</div>
+                  <div className="photo-footer">
+                    <div className="photo-timestamp">{formatTime(photo.timestamp)}</div>
+                    <button onClick={() => deletePhoto(photo.id)} className="delete-button">×</button>
+                  </div>
                 </div>
               ))}
             </div>
