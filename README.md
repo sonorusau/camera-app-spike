@@ -1,45 +1,98 @@
-# Camera Photo App
+# Rapid Camera Capture Architecture
 
-Basically threw this together to test out rapid photo capture. The whole point is you can spam the "Take Photo" button without the screen switching away from the camera feed, which is honestly how it should work everywhere.
+## The Core Problem
 
-## What it does
+Most camera apps switch between camera view and preview/gallery, breaking the flow. You take a photo, it shows you the photo, you have to navigate back to the camera. Can't rapid-fire multiple shots without the UI getting in the way.
 
-Split-screen layout - camera feed on the left, gallery on the right. Click the button, boom, photo shows up in the gallery instantly while the camera keeps running. No loading screens, no navigation, just continuous capture.
+## The Solution
 
-The gallery updates live as you take photos. You can delete any photo by clicking the little × button that appears on each one.
+Keep the camera stream running continuously while rendering captured photos alongside it. No navigation, no mode switching.
 
-## Tech Stack
+## How It Works
 
-- React + TypeScript
-- Vite (because it's fast)
-- Uses browser's native `getUserMedia` API for camera access
-- Canvas API for capturing frames
+### 1. Persistent Video Stream
 
-## Running it locally
-
-Make sure you have Node.js installed, then:
-
-```bash
-npm install
-npm run dev
+```typescript
+// Initialize once, never stop
+const mediaStream = await navigator.mediaDevices.getUserMedia({
+  video: { facingMode: 'user' },
+  audio: false
+})
+videoRef.current.srcObject = mediaStream
 ```
 
-Open the URL it gives you (usually `http://localhost:5173`). Your browser will ask for camera permission - you gotta allow it or nothing works.
+The `<video>` element keeps streaming. Nothing interrupts it when you capture.
 
-## How to use
+### 2. Frame Capture via Hidden Canvas
 
-1. Allow camera access when prompted
-2. Click "Take Photo" as many times as you want
-3. Photos show up in the gallery on the right immediately
-4. Hover over any photo and click the × to delete it
+```typescript
+const capturePhoto = () => {
+  const canvas = canvasRef.current
+  const context = canvas.getContext('2d')
 
-The rapid capture thing is the key feature here - camera never stops streaming, so you can take multiple photos in quick succession. Perfect for getting that one good shot when someone's moving around.
+  canvas.width = video.videoWidth
+  canvas.height = video.videoHeight
+  context.drawImage(video, 0, 0)
 
-## Notes
+  const dataUrl = canvas.toDataURL('image/png')
+  // Store dataUrl in state
+}
+```
 
-- Photos are only stored in memory (they're base64 data URLs)
-- Refresh the page and they're gone
-- Works best on desktop, mobile should work too but layout adapts
-- Uses your front-facing camera by default
+Key: Canvas is `display: none`. You're reading the current video frame without affecting the DOM or stream.
 
-That's it. Pretty straightforward.
+### 3. React State for Gallery
+
+```typescript
+const [photos, setPhotos] = useState<Photo[]>([])
+setPhotos(prev => [newPhoto, ...prev])
+```
+
+Each capture prepends to the array. React re-renders the gallery, video keeps running.
+
+### 4. Split Layout
+
+```css
+.main-content {
+  display: grid;
+  grid-template-columns: 40% 60%;
+}
+```
+
+Camera on left (40%), gallery on right (60%). Both visible simultaneously. No view switching.
+
+## Recreation Steps
+
+1. **Set up video stream**
+   - Use `getUserMedia()` to get MediaStream
+   - Assign to `<video>` ref's `srcObject`
+   - Set `autoPlay` and `playsInline` attributes
+
+2. **Create hidden canvas**
+   - Canvas with `display: none`
+   - Store ref to it
+   - Use canvas 2d context to draw video frames
+
+3. **Capture handler**
+   - `drawImage(video, 0, 0)` copies current frame
+   - `toDataURL()` converts to base64 string
+   - Store result in React state array
+
+4. **Render split UI**
+   - Video element on one side
+   - Map photos array to image elements on other side
+   - Both in same DOM, no conditional rendering
+
+5. **Critical: No navigation or modals**
+   - Everything happens in place
+   - No state that switches between "camera" and "gallery" views
+   - No full-screen previews that hide the camera
+
+## Why This Works
+
+- **MediaStream never stops**: Calling `toDataURL()` doesn't interrupt the stream
+- **Canvas is synchronous**: No async wait between frames
+- **State updates don't unmount video**: React reconciliation keeps the video element mounted
+- **Grid layout**: Both views exist simultaneously in the DOM
+
+That's it. Camera stays live, captures are instant, gallery updates in real-time.
