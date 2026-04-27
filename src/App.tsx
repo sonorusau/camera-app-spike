@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { MdCameraswitch, MdCamera } from 'react-icons/md'
 
 interface Photo {
   id: string
@@ -120,13 +121,24 @@ function App() {
                 <p>{error}</p>
               </div>
             ) : (
-              <video
-                ref={videoRef}
-                autoPlay
-                playsInline
-                muted
-                className="video-feed"
-              />
+              <>
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  playsInline
+                  muted
+                  className="video-feed"
+                />
+                {isMobile && (
+                  <button
+                    onClick={switchCamera}
+                    disabled={!stream || !!error}
+                    className="switch-button-overlay"
+                  >
+                    <MdCameraswitch size={24} />
+                  </button>
+                )}
+              </>
             )}
           </div>
           <div className="button-group">
@@ -135,17 +147,8 @@ function App() {
               disabled={!stream || !!error}
               className="capture-button"
             >
-              Take Photo
+              <MdCamera size={32} />
             </button>
-            {isMobile && (
-              <button
-                onClick={switchCamera}
-                disabled={!stream || !!error}
-                className="switch-button"
-              >
-                Switch Camera
-              </button>
-            )}
           </div>
         </div>
 
