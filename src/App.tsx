@@ -6,10 +6,18 @@ interface Photo {
   timestamp: Date
 }
 
+const isMobileDevice = () => {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+}
+
 function App() {
   const [photos, setPhotos] = useState<Photo[]>([])
   const [stream, setStream] = useState<MediaStream | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [isMobile] = useState(isMobileDevice())
+  const [facingMode, setFacingMode] = useState<'user' | 'environment'>(
+    isMobileDevice() ? 'environment' : 'user'
+  )
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -22,7 +30,7 @@ function App() {
 
       try {
         const mediaStream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'user' },
+          video: { facingMode: facingMode },
           audio: false
         })
 
@@ -30,6 +38,7 @@ function App() {
           videoRef.current.srcObject = mediaStream
         }
         setStream(mediaStream)
+        setError(null)
       } catch (err) {
         if (err instanceof Error) {
           if (err.name === 'NotAllowedError') {
@@ -50,7 +59,7 @@ function App() {
         stream.getTracks().forEach(track => track.stop())
       }
     }
-  }, [])
+  }, [facingMode])
 
   const capturePhoto = () => {
     if (!videoRef.current || !canvasRef.current) return
@@ -73,6 +82,15 @@ function App() {
     }
 
     setPhotos(prev => [newPhoto, ...prev])
+  }
+
+  const switchCamera = async () => {
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop())
+    }
+
+    const newFacingMode = facingMode === 'user' ? 'environment' : 'user'
+    setFacingMode(newFacingMode)
   }
 
   const deletePhoto = (photoId: string) => {
@@ -111,13 +129,24 @@ function App() {
               />
             )}
           </div>
-          <button
-            onClick={capturePhoto}
-            disabled={!stream || !!error}
-            className="capture-button"
-          >
-            Take Photo
-          </button>
+          <div className="button-group">
+            <button
+              onClick={capturePhoto}
+              disabled={!stream || !!error}
+              className="capture-button"
+            >
+              Take Photo
+            </button>
+            {isMobile && (
+              <button
+                onClick={switchCamera}
+                disabled={!stream || !!error}
+                className="switch-button"
+              >
+                Switch Camera
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="gallery-section">
